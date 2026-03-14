@@ -3,7 +3,7 @@ import { META } from "../constants";
 import SequenceGame from "../games/SequenceGame";
 import RobotGame    from "../games/RobotGame";
 import PatternGame  from "../games/PatternGame";
-import TypingGame   from "../games/TypingGame";
+import PythonGame   from "../games/PythonGame";
 
 export default function GameScreen({ gameId, onFinish, onHome }) {
   const [score, setScore] = useState(0);
@@ -16,7 +16,7 @@ export default function GameScreen({ gameId, onFinish, onHome }) {
     onFinish(gameId, finalScore);
   }
 
-  const GAME = { sequence: SequenceGame, robot: RobotGame, pattern: PatternGame, typing: TypingGame };
+  const GAME = { sequence: SequenceGame, robot: RobotGame, pattern: PatternGame, typing: PythonGame };
   const GameComp = GAME[gameId];
 
   return (
@@ -51,9 +51,10 @@ export default function GameScreen({ gameId, onFinish, onHome }) {
 
       <div style={{ maxWidth:640, margin:"0 auto", padding:"0 16px" }}>
         <GameComp
-          score={score}
-          onScore={handleScore}
-          onFinish={handleFinish}
+         score={score}
+         onScore={handleScore}
+         onFinish={handleFinish}
+         onHome={onHome}
         />
       </div>
     </div>
