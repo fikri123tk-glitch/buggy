@@ -30,10 +30,10 @@ export default function HomeScreen({ avatar, scores, completed, totalScore, done
             animation:"float 3s ease-in-out infinite",
           }}>{avatar}</div>
           <h1 style={{ fontSize:32, fontWeight:900, color:"#1E2240", margin:"0 0 6px" }}>
-            Logify <span>🪲</span>
+            Logify <span></span>
           </h1>
           <p style={{ fontSize:14, fontWeight:700, color:"#6B7280", margin:"0 0 20px" }}>
-            Belajar logika coding lewat 4 game seru!
+            Belajar logika coding Bersama Logify!
           </p>
 
           {/* Stats */}
