@@ -9,6 +9,14 @@ const LEVELS = [
   { grid:7, robot:[0,0], goal:[6,6], walls:[[2,1],[2,2],[4,4],[4,5],[3,0],[3,1]], badge:"Sedang" },
   { grid:7, robot:[0,3], goal:[6,3], walls:[[2,2],[2,3],[2,4],[4,2],[4,3],[4,4]], badge:"Susah" },
   { grid:7, robot:[0,0], goal:[6,5], walls:[[1,1],[2,2],[2,3],[3,4],[4,0],[4,1],[5,3]], badge:"Susah" },
+  { grid:5, robot:[4,0], goal:[0,4], walls:[[2,1],[2,2],[2,3]], badge:"Mudah" },
+  { grid:6, robot:[0,5], goal:[5,0], walls:[[2,2],[2,3],[3,2],[3,3]], badge:"Mudah" },
+  { grid:6, robot:[0,0], goal:[5,5], walls:[[1,0],[1,1],[3,3],[3,4],[3,5]], badge:"Sedang" },
+  { grid:6, robot:[3,0], goal:[3,5], walls:[[1,2],[1,3],[2,1],[4,1],[4,2],[5,3]], badge:"Sedang" },
+  { grid:7, robot:[0,6], goal:[6,0], walls:[[2,3],[2,4],[2,5],[4,1],[4,2],[4,3]], badge:"Sedang" },
+  { grid:7, robot:[0,0], goal:[6,6], walls:[[1,2],[2,1],[2,4],[3,3],[4,2],[4,5],[5,1]], badge:"Susah" },
+  { grid:7, robot:[6,0], goal:[0,6], walls:[[1,1],[2,3],[3,2],[3,4],[4,3],[5,2],[5,5]], badge:"Susah" },
+  { grid:8, robot:[0,0], goal:[7,7], walls:[[2,1],[2,2],[3,4],[4,3],[4,6],[5,1],[5,5],[6,3]], badge:"Susah" },
 ];
 
 const DIR = {
