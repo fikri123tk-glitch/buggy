@@ -1,6 +1,11 @@
 /* ── Reset & base ─────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+@font-face {
+  font-family: 'AdigianaToyBox';
+  src: url('./font/GrowYear.ttf') format('truetype');
+}
+
 :root {
   --f:  'Nunito', sans-serif;
   --fm: 'JetBrains Mono', monospace;

@@ -29,7 +29,9 @@ export default function HomeScreen({ avatar, scores, completed, totalScore, done
             filter:"drop-shadow(0 4px 16px rgba(0,0,0,0.15))",
             animation:"float 3s ease-in-out infinite",
           }}>{avatar}</div>
-          <h1 style={{ fontSize:32, fontWeight:900, color:"#1E2240", margin:"0 0 6px" }}>
+          <h1 style={{ fontSize:32, fontWeight:900, color:"#1E2240", margin:"0 0 6px",
+             fontFamily: "'Grow Year', cursive"
+           }}>
             Logify <span></span>
           </h1>
           <p style={{ fontSize:14, fontWeight:700, color:"#6B7280", margin:"0 0 20px" }}>
