@@ -49,7 +49,7 @@ export default function BgCanvas({ avatar }) {
       resize();
       particles = [];
       for (let i = 0; i < 40; i++) { const p = makeSymbol(); p.y = Math.random() * H; particles.push(p); }
-      for (let i = 0; i < 10; i++) { const a = makeAvatar(); a.y = Math.random() * H; particles.push(a); }
+     
     }
 
     function draw() {
@@ -71,9 +71,9 @@ export default function BgCanvas({ avatar }) {
         }
         ctx.restore();
         p.x += p.vx; p.y += p.vy; p.rot += p.vrot;
-        if (p.y < -80) {
-          const fresh = p.type === "sym" ? makeSymbol() : makeAvatar();
-          Object.assign(p, fresh);
+       if (p.y < -80) {
+         const fresh = makeSymbol();
+         Object.assign(p, fresh);
         }
         if (p.x < -80) p.x = W + 20;
         if (p.x > W + 80) p.x = -20;
