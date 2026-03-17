@@ -98,7 +98,7 @@ export default function HomeScreen({ avatar, scores, completed, totalScore, done
 
                 {/* Info */}
                 <div style={{ flex:1 }}>
-                  <div style={{ fontSize:15, fontWeight:900, color:"#1E2240", marginBottom:2, fontFamily: "'Grow Year', cursive" }}>{m.title}</div>
+                  <div style={{ fontSize:16, fontWeight:1000, color:"#1E2240", marginBottom:2, fontFamily: "'Grow Year', cursive" }}>{m.title}</div>
                   <div style={{ fontSize:12, fontWeight:700, color:"#9CA3AF" }}>{DESCS[id]}</div>
                   {done && (
                     <div style={{ fontSize:11, fontWeight:800, color:c.accent, marginTop:3 }}>

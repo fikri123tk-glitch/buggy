@@ -3,10 +3,10 @@ export const AVATARS = ["🐱","🪲","🐸","🦊","🐼","🐨","🦁","🐯"]
 
 // ── Game metadata ────────────────────────────────────────
 export const META = {
-  sequence: { title:"Urutan Perintah",   icon:"📋", color:"#FF9F43" },
-  robot:    { title:"Gerak Robot",       icon:"🤖", color:"#3B82F6" },
-  pattern:  { title:"Pola & Perulangan", icon:"🔄", color:"#8B5CF6" },
-  typing:   { title:"Ketik Kodenya!",    icon:"⌨️",  color:"#10B981" },
+  sequence: { title:"Sequence Quest",   icon:"📋", color:"#FF9F43" },
+  robot:    { title:"RoboPath",       icon:"🤖", color:"#3B82F6" },
+  pattern:  { title:"Loop Quest", icon:"🔄", color:"#8B5CF6" },
+  typing:   { title:"PyPlay",    icon:"⌨️",  color:"#10B981" },
 };
 
 // ── Sequence levels ──────────────────────────────────────
