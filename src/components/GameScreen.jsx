@@ -36,7 +36,7 @@ export default function GameScreen({ gameId, onFinish, onHome }) {
 
         <span style={{ fontSize:22 }}>{m.icon}</span>
         <div style={{ flex:1 }}>
-          <div style={{ fontSize:15, fontWeight:900, color:"#1E2240", lineHeight:1 }}>{m.title}</div>
+          <div style={{ fontSize:15, fontWeight:700, color:"#1E2240", lineHeight:1, fontFamily: "'Grow Year', cursive" }}>{m.title}</div>
           <div style={{ fontSize:11, fontWeight:700, color:"#9CA3AF" }}>Logify</div>
         </div>
 
