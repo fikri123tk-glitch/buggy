@@ -4,7 +4,7 @@ import HomeScreen   from "./components/HomeScreen";
 import GameScreen   from "./components/GameScreen";
 import ResultScreen from "./components/ResultScreen";
 import BgCanvas     from "./components/BgCanvas";
-import LoginScreen  from "./components/LoginScreen";
+import LoginScreen  from "./components/loginscreen";
 import "./App.css";
 
 const API = "http://localhost:3001";
