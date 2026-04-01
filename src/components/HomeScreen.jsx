@@ -121,7 +121,7 @@ export default function HomeScreen({ avatar, username, user, scores, completed, 
                   borderRadius:12, color:"#EF4444",
                   fontSize:13, fontWeight:900, cursor:"pointer",
                   fontFamily:"'Nunito',sans-serif",
-                }}> Keluar</button>
+                }}>🚪 Keluar</button>
               </div>
             </>
           )}
@@ -162,7 +162,7 @@ export default function HomeScreen({ avatar, username, user, scores, completed, 
               border:"2px solid #FCD34D", borderRadius:12,
               padding:"10px 20px", fontSize:14, fontWeight:900, color:"#92400E",
               maxWidth:320, margin:"8px auto 0",
-            }}> Kamu sudah selesaikan semua game!</div>
+            }}>🌟 Kamu sudah selesaikan semua game!</div>
           )}
         </div>
 
