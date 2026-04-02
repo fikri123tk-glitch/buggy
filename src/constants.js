@@ -3,10 +3,11 @@ export const AVATARS = ["🐱","🪲","🐸","🦊","🐼","🐨","🦁","🐯"]
 
 // ── Game metadata ────────────────────────────────────────
 export const META = {
-  sequence: { title:"Sequence Quest",   icon:"📋", color:"#FF9F43" },
-  robot:    { title:"RoboPath",       icon:"🤖", color:"#3B82F6" },
-  pattern:  { title:"Loop Quest", icon:"🔄", color:"#8B5CF6" },
-  typing:   { title:"PyPlay",    icon:"⌨️",  color:"#10B981" },
+  sequence:  { title:"Sequence Quest",  icon:"📋", color:"#FF9F43" },
+  robot:     { title:"RoboPath",        icon:"🤖", color:"#3B82F6" },
+  pattern:   { title:"Loop Quest",      icon:"🔄", color:"#8B5CF6" },
+  typing:    { title:"PyPlay",          icon:"⌨️",  color:"#10B981" },
+  challenge: { title:"⚡ Challenge!",   icon:"⚡", color:"#EF4444" },
 };
 
 // ── Sequence levels ──────────────────────────────────────

@@ -4,6 +4,7 @@ import SequenceGame from "../games/SequenceGame";
 import RobotGame    from "../games/RobotGame";
 import PatternGame  from "../games/PatternGame";
 import PythonGame   from "../games/PythonGame";
+import ChallengeGame from "../games/ChallengeGame";
 
 export default function GameScreen({ gameId, onFinish, onHome }) {
   const [score, setScore] = useState(0);
@@ -16,7 +17,7 @@ export default function GameScreen({ gameId, onFinish, onHome }) {
     onFinish(gameId, finalScore);
   }
 
-  const GAME = { sequence: SequenceGame, robot: RobotGame, pattern: PatternGame, typing: PythonGame };
+  const GAME = { sequence: SequenceGame, robot: RobotGame, pattern: PatternGame, typing: PythonGame, challenge: ChallengeGame };
   const GameComp = GAME[gameId];
 
   return (

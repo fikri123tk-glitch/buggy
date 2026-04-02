@@ -22,13 +22,15 @@ export default function App() {
   // ── Screen ────────────────────────────────────────────
   const [screen, setScreen] = useState("home");
  
-  // ── Game state ────────────────────────────────────────
+  // ── Active game ───────────────────────────────────────
   const [activeGame, setActiveGame] = useState(null);
+ 
+  // ── Game state ────────────────────────────────────────
   const [scores, setScores] = useState(
-    { sequence: 0, robot: 0, pattern: 0, typing: 0 }
+    { sequence:0, robot:0, pattern:0, typing:0, challenge:0 }
   );
   const [completed, setCompleted] = useState(
-    { sequence: false, robot: false, pattern: false, typing: false }
+    { sequence:false, robot:false, pattern:false, typing:false, challenge:false }
   );
   const [lastResult, setLastResult] = useState(null);
  
@@ -44,8 +46,8 @@ export default function App() {
     localStorage.removeItem("logify_token");
     setUser(null);
     setScreen("home");
-    setScores({ sequence: 0, robot: 0, pattern: 0, typing: 0 });
-    setCompleted({ sequence: false, robot: false, pattern: false, typing: false });
+    setScores({ sequence:0, robot:0, pattern:0, typing:0, challenge:0 });
+    setCompleted({ sequence:false, robot:false, pattern:false, typing:false, challenge:false });
   }
  
   // ── Game handlers ─────────────────────────────────────
@@ -64,9 +66,9 @@ export default function App() {
     setScreen("result");
  
     // Update progress ke backend
-    const doneCount = Object.values(newCompleted).filter(Boolean).length;
-    const totalScore = Object.values(newScores).reduce((a, b) => a + b, 0);
-    const progressPercent = Math.round((doneCount / 4) * 100);
+    const doneCount       = Object.values(newCompleted).filter(Boolean).length;
+    const totalScore      = Object.values(newScores).reduce((a, b) => a + b, 0);
+    const progressPercent = Math.round((doneCount / 5) * 100);
  
     const token = localStorage.getItem("logify_token");
     if (token) {
@@ -81,8 +83,12 @@ export default function App() {
             progress_percent: progressPercent,
           }),
         });
-        // Update local user data
-        const updatedUser = { ...user, total_score: totalScore, games_completed: doneCount, progress_percent: progressPercent };
+        const updatedUser = {
+          ...user,
+          total_score: totalScore,
+          games_completed: doneCount,
+          progress_percent: progressPercent,
+        };
         setUser(updatedUser);
         localStorage.setItem("logify_user", JSON.stringify(updatedUser));
       } catch {
