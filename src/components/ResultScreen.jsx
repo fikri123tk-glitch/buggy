@@ -1,9 +1,11 @@
 import { META } from "../constants";
 
-export default function ResultScreen({ result, scores, doneCount, onPlayAgain, onHome }) {
+const GAME_IDS = ["sequence","robot","pattern","typing","challenge"];
+
+export default function ResultScreen({ result, scores, completed, doneCount, onPlayAgain, onHome }) {
   const { id, score } = result;
   const m = META[id];
-  const allDone = doneCount === 4;
+  const allDone = doneCount === GAME_IDS.length; // 🔹 Fix: 4 → 5 games
   const totalScore = Object.values(scores).reduce((a,b)=>a+b, 0);
 
   const emoji = score >= 70 ? "🌟" : score >= 40 ? "😊" : "💪";
@@ -36,7 +38,7 @@ export default function ResultScreen({ result, scores, doneCount, onPlayAgain, o
 
         {/* Total */}
         <div style={{ fontSize:13, fontWeight:700, color:"#9CA3AF", marginBottom:24 }}>
-          Total semua game: <strong style={{ color:"#1E2240" }}>{totalScore} poin</strong> · {doneCount}/4 selesai
+          Total semua game: <strong style={{ color:"#1E2240" }}>{totalScore} poin</strong> · {doneCount}/{GAME_IDS.length} selesai
         </div>
 
         {allDone && (
@@ -46,7 +48,7 @@ export default function ResultScreen({ result, scores, doneCount, onPlayAgain, o
             padding:"10px 20px", fontSize:13, fontWeight:900, color:"#92400E",
             marginBottom:20,
           }}>
-            🎉 Semua game selesai! Kamu hebat!
+            Semua game selesai! Kamu hebat!
           </div>
         )}
 
@@ -58,7 +60,7 @@ export default function ResultScreen({ result, scores, doneCount, onPlayAgain, o
             fontFamily:"'Nunito',sans-serif", fontSize:14, fontWeight:900,
             cursor:"pointer", boxShadow:`0 4px 0 ${m.color}AA`,
           }}>
-            🔁 Main Lagi
+            Main Lagi
           </button>
           <button onClick={onHome} style={{
             flex:1, background:"#F0F4FF", color:"#1E2240", border:"2px solid #E2E8F0",
@@ -66,7 +68,7 @@ export default function ResultScreen({ result, scores, doneCount, onPlayAgain, o
             fontFamily:"'Nunito',sans-serif", fontSize:14, fontWeight:900,
             cursor:"pointer",
           }}>
-            🏠 Menu
+            Menu
           </button>
         </div>
       </div>
