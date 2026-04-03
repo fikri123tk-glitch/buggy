@@ -82,11 +82,29 @@ export default function App() {
   }, []); // Hanya jalan sekali saat app mount
 
   // ── Login handler ────────────────────────────────────
-  function handleLogin(userData) {
+  async function handleLogin(userData) {
     setUser(userData);
     // Reset scores & completed untuk user baru
-    const initialScores = { sequence:0, robot:0, pattern:0, typing:0, challenge:0 };
-    const initialCompleted = { sequence:false, robot:false, pattern:false, typing:false, challenge:false };
+     const initialScores = { sequence:0, robot:0, pattern:0, typing:0, challenge:0 };
+     const initialCompleted = { sequence:false, robot:false, pattern:false, typing:false, challenge:false };
+     const token = localStorage.getItem("logify_token");
+     if (token && userData.total_score > 0) {
+      try {
+      // Fetch user profile terbaru dari backend
+        const response = await fetch(`${API}/api/user`, {
+        headers: { "Authorization": `Bearer ${token}` }
+      });
+      const data = await response.json();
+      
+      if (data.success) {
+        // Update user dengan data lengkap dari database
+        setUser(data.user);
+        localStorage.setItem("logify_user", JSON.stringify(data.user));
+      }
+      } catch (err) {
+        console.warn("Failed to fetch user data:", err);
+      }
+    }
     setScores(initialScores);
     setCompleted(initialCompleted);
     localStorage.setItem("logify_scores", JSON.stringify(initialScores));
@@ -95,78 +113,91 @@ export default function App() {
   }
  
   // ── Logout handler ───────────────────────────────────
-  async function handleLogout() {
-    const token = localStorage.getItem("logify_token");
+  // Di App.jsx, update handleLogout function:
+
+async function handleLogout() {
+  const token = localStorage.getItem("logify_token");
+  
+  // 🔹 Submit progress terakhir ke backend SEBELUM logout
+  if (token && user) {
+    const doneCount = Object.values(completed).filter(Boolean).length;
+    const totalScore = Object.values(scores).reduce((a, b) => a + b, 0);
+    const progressPercent = Math.round((doneCount / 5) * 100);
     
-    // 🔹 Submit progress terakhir ke backend SEBELUM logout
-    if (token && user) {
-      const doneCount = Object.values(completed).filter(Boolean).length;
-      const totalScore = Object.values(scores).reduce((a, b) => a + b, 0);
-      const progressPercent = Math.round((doneCount / 5) * 100);
+    try {
+      const response = await fetch(`${API}/api/progress`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          token,
+          total_score: totalScore,
+          games_completed: doneCount,
+          progress_percent: progressPercent,
+        }),
+      });
       
-      try {
-        await fetch(`${API}/api/progress`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            token,
-            total_score: totalScore,
-            games_completed: doneCount,
-            progress_percent: progressPercent,
-          }),
-        });
-        console.log("✅ Progress saved before logout");
-      } catch (err) {
-        console.error("❌ Failed to save progress:", err);
+      const result = await response.json();
+      
+      if (result.success) {
+        console.log("✅ Progress saved to database before logout");
+      } else {
+        console.error("❌ Failed to save progress:", result.error);
       }
+    } catch (err) {
+      console.error("❌ Network error:", err);
     }
-    
-    // 🔹 Baru hapus localStorage & reset state
-    localStorage.removeItem("logify_user");
-    localStorage.removeItem("logify_token");
-    localStorage.removeItem("logify_scores");
-    localStorage.removeItem("logify_completed");
-    
-    setUser(null);
-    setScores({ sequence:0, robot:0, pattern:0, typing:0, challenge:0 });
-    setCompleted({ sequence:false, robot:false, pattern:false, typing:false, challenge:false });
-    setScreen("home");
   }
- 
+  
+  // 🔹 Baru hapus localStorage & reset state
+  localStorage.removeItem("logify_user");
+  localStorage.removeItem("logify_token");
+  localStorage.removeItem("logify_scores");
+  localStorage.removeItem("logify_completed");
+  
+  setUser(null);
+  setScores({ sequence:0, robot:0, pattern:0, typing:0, challenge:0 });
+  setCompleted({ sequence:false, robot:false, pattern:false, typing:false, challenge:false });
+  setScreen("home");
+}
   // ── Game handlers ─────────────────────────────────────
   function startGame(id) {
     setActiveGame(id);
     setScreen("game");
   }
  
-  async function finishGame(id, score) {
-    const newScores = { ...scores, [id]: score };
-    const newCompleted = { ...completed, [id]: true };
- 
-    setScores(newScores);
-    setCompleted(newCompleted);
-    setLastResult({ id, score });
-    setScreen("result");
- 
-    // Update progress ke backend
-    const doneCount = Object.values(newCompleted).filter(Boolean).length;
-    const totalScore = Object.values(newScores).reduce((a, b) => a + b, 0);
-    const progressPercent = Math.round((doneCount / 5) * 100);
- 
-    const token = localStorage.getItem("logify_token");
-    if (token && user) {
-      try {
-        await fetch(`${API}/api/progress`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            token,
-            total_score: totalScore,
-            games_completed: doneCount,
-            progress_percent: progressPercent,
-          }),
-        });
-        
+  // Di App.jsx, update finishGame function:
+
+async function finishGame(id, score) {
+  const newScores = { ...scores, [id]: score };
+  const newCompleted = { ...completed, [id]: true };
+
+  setScores(newScores);
+  setCompleted(newCompleted);
+  setLastResult({ id, score });
+  setScreen("result");
+
+  // Update progress ke backend
+  const doneCount = Object.values(newCompleted).filter(Boolean).length;
+  const totalScore = Object.values(newScores).reduce((a, b) => a + b, 0);
+  const progressPercent = Math.round((doneCount / 5) * 100);
+
+  const token = localStorage.getItem("logify_token");
+  if (token && user) {
+    try {
+      const response = await fetch(`${API}/api/progress`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          token,
+          total_score: totalScore,
+          games_completed: doneCount,
+          progress_percent: progressPercent,
+        }),
+      });
+      
+      const result = await response.json();
+      
+      if (result.success) {
         // Update user state & localStorage
         const updatedUser = {
           ...user,
@@ -176,13 +207,13 @@ export default function App() {
         };
         setUser(updatedUser);
         localStorage.setItem("logify_user", JSON.stringify(updatedUser));
-        
-        console.log("✅ Progress updated");
-      } catch (err) {
-        console.error("❌ Failed to update progress:", err);
+        console.log("✅ Progress updated after game");
       }
+    } catch (err) {
+      console.error("❌ Failed to update progress:", err);
     }
   }
+}
  
   function playAgain() { setScreen("game"); }
   function goHome() { setScreen("home"); }
