@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react"; // 🔹 Tambah useEffect
 import { META } from "./constants";
 import HomeScreen   from "./components/HomeScreen";
 import GameScreen   from "./components/GameScreen";
@@ -8,8 +8,6 @@ import LoginScreen  from "./components/loginscreen";
 import LeaderboardScreen from "./components/leaderboardscreen";
 import "./App.css";
 
-import "./App.css";
- 
 const API = "http://localhost:3001";
  
 export default function App() {
@@ -26,52 +24,86 @@ export default function App() {
   const [activeGame, setActiveGame] = useState(null);
  
   // ── Game state ────────────────────────────────────────
-  const [scores, setScores] = useState(
-    { sequence:0, robot:0, pattern:0, typing:0, challenge:0 }
-  );
-  const [completed, setCompleted] = useState(
-    { sequence:false, robot:false, pattern:false, typing:false, challenge:false }
-  );
+  // 🔹 Load dari localStorage jika ada (fallback saat refresh)
+  const [scores, setScores] = useState(() => {
+    const saved = localStorage.getItem("logify_scores");
+    return saved ? JSON.parse(saved) : { sequence:0, robot:0, pattern:0, typing:0, challenge:0 };
+  });
+  
+  const [completed, setCompleted] = useState(() => {
+    const saved = localStorage.getItem("logify_completed");
+    return saved ? JSON.parse(saved) : { sequence:false, robot:false, pattern:false, typing:false, challenge:false };
+  });
+  
   const [lastResult, setLastResult] = useState(null);
- 
+  const [loading, setLoading] = useState(true); // 🔹 Loading state
+
+  // 🔹 Persist scores & completed ke localStorage setiap berubah
+  useEffect(() => {
+    localStorage.setItem("logify_scores", JSON.stringify(scores));
+  }, [scores]);
+
+  useEffect(() => {
+    localStorage.setItem("logify_completed", JSON.stringify(completed));
+  }, [completed]);
+
+  // 🔹 Load user data + scores dari backend saat app mount/refresh
+  useEffect(() => {
+    const loadData = async () => {
+      const token = localStorage.getItem("logify_token");
+      const storedUser = localStorage.getItem("logify_user");
+
+      if (token && storedUser) {
+        try {
+          // Fetch user terbaru dari backend
+          const response = await fetch(`${API}/api/user`, {
+            headers: { "Authorization": `Bearer ${token}` }
+          });
+          
+          const data = await response.json();
+          
+          if (data.success && data.user) {
+            // Update user state dengan data dari database
+            setUser(data.user);
+            localStorage.setItem("logify_user", JSON.stringify(data.user));
+            
+            // 🔹 Optional: Fetch scores per game jika backend support endpoint /api/scores
+            // Untuk sekarang, kita pakai data dari localStorage sebagai fallback
+          }
+        } catch (err) {
+          console.warn("Failed to fetch from backend, using localStorage:", err);
+          // Fallback: pakai data dari localStorage (sudah di-load di useState)
+        }
+      }
+      setLoading(false);
+    };
+
+    loadData();
+  }, []); // Hanya jalan sekali saat app mount
+
   // ── Login handler ────────────────────────────────────
   function handleLogin(userData) {
     setUser(userData);
+    // Reset scores & completed untuk user baru
+    const initialScores = { sequence:0, robot:0, pattern:0, typing:0, challenge:0 };
+    const initialCompleted = { sequence:false, robot:false, pattern:false, typing:false, challenge:false };
+    setScores(initialScores);
+    setCompleted(initialCompleted);
+    localStorage.setItem("logify_scores", JSON.stringify(initialScores));
+    localStorage.setItem("logify_completed", JSON.stringify(initialCompleted));
     setScreen("home");
   }
  
   // ── Logout handler ───────────────────────────────────
-  function handleLogout() {
-    localStorage.removeItem("logify_user");
-    localStorage.removeItem("logify_token");
-    setUser(null);
-    setScreen("home");
-    setScores({ sequence:0, robot:0, pattern:0, typing:0, challenge:0 });
-    setCompleted({ sequence:false, robot:false, pattern:false, typing:false, challenge:false });
-  }
- 
-  // ── Game handlers ─────────────────────────────────────
-  function startGame(id) {
-    setActiveGame(id);
-    setScreen("game");
-  }
- 
-  async function finishGame(id, score) {
-    const newScores    = { ...scores,    [id]: score };
-    const newCompleted = { ...completed, [id]: true  };
- 
-    setScores(newScores);
-    setCompleted(newCompleted);
-    setLastResult({ id, score });
-    setScreen("result");
- 
-    // Update progress ke backend
-    const doneCount       = Object.values(newCompleted).filter(Boolean).length;
-    const totalScore      = Object.values(newScores).reduce((a, b) => a + b, 0);
-    const progressPercent = Math.round((doneCount / 5) * 100);
- 
+  async function handleLogout() {
     const token = localStorage.getItem("logify_token");
-    if (token) {
+    
+    // 🔹 Submit progress terakhir ke backend SEBELUM logout
+    if (token && user) {
+      const doneCount = Object.values(completed).filter(Boolean).length;
+      const totalScore = Object.values(scores).reduce((a, b) => a + b, 0);
+      const progressPercent = Math.round((doneCount / 5) * 100);
+      
       try {
         await fetch(`${API}/api/progress`, {
           method: "POST",
@@ -83,6 +115,59 @@ export default function App() {
             progress_percent: progressPercent,
           }),
         });
+        console.log("✅ Progress saved before logout");
+      } catch (err) {
+        console.error("❌ Failed to save progress:", err);
+      }
+    }
+    
+    // 🔹 Baru hapus localStorage & reset state
+    localStorage.removeItem("logify_user");
+    localStorage.removeItem("logify_token");
+    localStorage.removeItem("logify_scores");
+    localStorage.removeItem("logify_completed");
+    
+    setUser(null);
+    setScores({ sequence:0, robot:0, pattern:0, typing:0, challenge:0 });
+    setCompleted({ sequence:false, robot:false, pattern:false, typing:false, challenge:false });
+    setScreen("home");
+  }
+ 
+  // ── Game handlers ─────────────────────────────────────
+  function startGame(id) {
+    setActiveGame(id);
+    setScreen("game");
+  }
+ 
+  async function finishGame(id, score) {
+    const newScores = { ...scores, [id]: score };
+    const newCompleted = { ...completed, [id]: true };
+ 
+    setScores(newScores);
+    setCompleted(newCompleted);
+    setLastResult({ id, score });
+    setScreen("result");
+ 
+    // Update progress ke backend
+    const doneCount = Object.values(newCompleted).filter(Boolean).length;
+    const totalScore = Object.values(newScores).reduce((a, b) => a + b, 0);
+    const progressPercent = Math.round((doneCount / 5) * 100);
+ 
+    const token = localStorage.getItem("logify_token");
+    if (token && user) {
+      try {
+        await fetch(`${API}/api/progress`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            token,
+            total_score: totalScore,
+            games_completed: doneCount,
+            progress_percent: progressPercent,
+          }),
+        });
+        
+        // Update user state & localStorage
         const updatedUser = {
           ...user,
           total_score: totalScore,
@@ -91,17 +176,41 @@ export default function App() {
         };
         setUser(updatedUser);
         localStorage.setItem("logify_user", JSON.stringify(updatedUser));
-      } catch {
-        console.log("Gagal update progress ke server");
+        
+        console.log("✅ Progress updated");
+      } catch (err) {
+        console.error("❌ Failed to update progress:", err);
       }
     }
   }
  
   function playAgain() { setScreen("game"); }
-  function goHome()    { setScreen("home"); }
+  function goHome() { setScreen("home"); }
  
   const totalScore = Object.values(scores).reduce((a, b) => a + b, 0);
-  const doneCount  = Object.values(completed).filter(Boolean).length;
+  const doneCount = Object.values(completed).filter(Boolean).length;
+
+  // 🔹 Tampilkan loading screen saat load data
+  if (loading) {
+    return (
+      <div className="app" style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        minHeight: "100vh",
+        background: "#F0F4FF"
+      }}>
+        <div style={{
+          fontSize: 20,
+          fontWeight: 900,
+          color: "#3B82F6",
+          fontFamily: "'GrowYear', 'Nunito', sans-serif"
+        }}>
+          Loading Logify...
+        </div>
+      </div>
+    );
+  }
  
   // ── Belum login → tampilkan LoginScreen ──────────────
   if (!user) {
@@ -140,6 +249,7 @@ export default function App() {
         <ResultScreen
           result={lastResult}
           scores={scores}
+          completed={completed}
           doneCount={doneCount}
           onPlayAgain={playAgain}
           onHome={goHome}
@@ -155,4 +265,3 @@ export default function App() {
     </div>
   );
 }
- 

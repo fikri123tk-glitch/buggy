@@ -31,7 +31,7 @@ export default function HomeScreen({ avatar, username, user, scores, completed, 
         position:"fixed", top:20, left:24, zIndex:50,
         background:"white", border:"2.5px solid #E2E8F0",
         borderRadius:14, padding:"10px 18px",
-        fontFamily:"'Nunito',sans-serif", fontSize:14,
+        fontFamily:"'Nunito', sans-serif", fontSize:14,
         fontWeight:900, color:"#1E2240", cursor:"pointer",
         display:"flex", alignItems:"center", gap:6,
         boxShadow:"0 4px 16px rgba(0,0,0,0.08)", transition:"all 0.15s",
@@ -48,12 +48,13 @@ export default function HomeScreen({ avatar, username, user, scores, completed, 
           borderRadius:14, padding:"8px 14px",
           cursor:"pointer", display:"flex", alignItems:"center", gap:10,
           boxShadow:"0 4px 16px rgba(0,0,0,0.08)",
-          transition:"all 0.15s", fontFamily:"'Nunito',sans-serif",
+          transition:"all 0.15s", fontFamily:"'Nunito', sans-serif",
         }}>
+          {/* 🔹 Avatar user (emoji) - ini avatar user, bukan logo app */}
           <div style={{ fontSize:26, lineHeight:1 }}>{avatar}</div>
           <div style={{ textAlign:"left" }}>
-            <div style={{ fontSize:14, fontWeight:900, color:"#1E2240" }}>{username}</div>
-            <div style={{ fontSize:11, fontWeight:700, color:"#9CA3AF" }}>Lihat profil</div>
+            <div style={{ fontSize:14, fontWeight:900, color:"#1E2240", fontFamily:"'Nunito', sans-serif" }}>{username}</div>
+            <div style={{ fontSize:11, fontWeight:700, color:"#9CA3AF", fontFamily:"'Nunito', sans-serif" }}>Lihat profil</div>
           </div>
           <div style={{ fontSize:12, color:"#9CA3AF" }}>{showProfile ? "▲" : "▼"}</div>
         </button>
@@ -72,9 +73,10 @@ export default function HomeScreen({ avatar, username, user, scores, completed, 
               animation:"popIn 0.2s ease",
             }}>
               <div style={{ textAlign:"center", marginBottom:16 }}>
+                {/* 🔹 Avatar user di popup (emoji) */}
                 <div style={{ fontSize:48, marginBottom:6 }}>{avatar}</div>
-                <div style={{ fontSize:18, fontWeight:900, color:"#1E2240" }}>{username}</div>
-                <div style={{ fontSize:12, fontWeight:700, color:"#9CA3AF" }}>Pemain Logify</div>
+                <div style={{ fontSize:18, fontWeight:900, color:"#1E2240", fontFamily:"'Nunito', sans-serif" }}>{username}</div>
+                <div style={{ fontSize:12, fontWeight:700, color:"#9CA3AF", fontFamily:"'Nunito', sans-serif" }}>Pemain Logify</div>
               </div>
               <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:8, marginBottom:16 }}>
                 {[
@@ -88,15 +90,15 @@ export default function HomeScreen({ avatar, username, user, scores, completed, 
                     padding:"10px 12px", textAlign:"center",
                     border:`1.5px solid ${s.color}30`,
                   }}>
-                    <div style={{ fontSize:18, fontWeight:900, color:s.color }}>{s.value}</div>
-                    <div style={{ fontSize:10, fontWeight:800, color:"#9CA3AF", textTransform:"uppercase", letterSpacing:"0.05em" }}>{s.label}</div>
+                    <div style={{ fontSize:18, fontWeight:900, color:s.color, fontFamily:"'Nunito', sans-serif" }}>{s.value}</div>
+                    <div style={{ fontSize:10, fontWeight:800, color:"#9CA3AF", textTransform:"uppercase", letterSpacing:"0.05em", fontFamily:"'Nunito', sans-serif" }}>{s.label}</div>
                   </div>
                 ))}
               </div>
               <div style={{ marginBottom:16 }}>
                 <div style={{ display:"flex", justifyContent:"space-between", marginBottom:5 }}>
-                  <span style={{ fontSize:11, fontWeight:800, color:"#9CA3AF", textTransform:"uppercase" }}>Progress</span>
-                  <span style={{ fontSize:11, fontWeight:900, color:"#1E2240" }}>{progressPercent}%</span>
+                  <span style={{ fontSize:11, fontWeight:800, color:"#9CA3AF", textTransform:"uppercase", fontFamily:"'Nunito', sans-serif" }}>Progress</span>
+                  <span style={{ fontSize:11, fontWeight:900, color:"#1E2240", fontFamily:"'Nunito', sans-serif" }}>{progressPercent}%</span>
                 </div>
                 <div style={{ height:8, background:"#F0F4FF", borderRadius:99, overflow:"hidden" }}>
                   <div style={{
@@ -111,11 +113,11 @@ export default function HomeScreen({ avatar, username, user, scores, completed, 
                 background:"white", border:"2px solid #EF4444",
                 borderRadius:12, color:"#EF4444",
                 fontSize:13, fontWeight:900, cursor:"pointer",
-                fontFamily:"'Nunito',sans-serif", transition:"all 0.15s",
+                fontFamily:"'Nunito', sans-serif", transition:"all 0.15s",
               }}
               onMouseEnter={e=>e.currentTarget.style.background="#FEF2F2"}
               onMouseLeave={e=>e.currentTarget.style.background="white"}
-              >🚪 Keluar</button>
+              >Keluar</button>
             </div>
           </>
         )}
@@ -127,7 +129,7 @@ export default function HomeScreen({ avatar, username, user, scores, completed, 
         {/* Hero */}
         <div style={{ textAlign:"center", paddingBottom:24 }}>
 
-          {/* Logo */}
+          {/* Logo App */}
           <img
             src="/logo.png"
             alt="Logify"
@@ -143,7 +145,7 @@ export default function HomeScreen({ avatar, username, user, scores, completed, 
               document.getElementById("logo-fallback").style.display="block";
             }}
           />
-          {/* Fallback */}
+          {/* Fallback jika logo gagal load */}
           <div id="logo-fallback" style={{
             fontSize:80, lineHeight:1, marginBottom:4,
             display:"none",
@@ -155,6 +157,7 @@ export default function HomeScreen({ avatar, username, user, scores, completed, 
           <p style={{
             fontSize:14, fontWeight:700, color:"#9CA3AF",
             margin:"0 0 20px", letterSpacing:"0.01em",
+            fontFamily:"'Nunito', sans-serif",
           }}>
             Belajar logika coding Bersama Logify!
           </p>
@@ -167,13 +170,13 @@ export default function HomeScreen({ avatar, username, user, scores, completed, 
             marginBottom:8,
           }}>
             <div style={{ padding:"14px 28px", textAlign:"center" }}>
-              <div style={{ fontSize:22, fontWeight:900, color:"#1E2240" }}>{totalScore}</div>
-              <div style={{ fontSize:10, fontWeight:800, color:"#9CA3AF", textTransform:"uppercase", letterSpacing:"0.08em" }}>Total Poin</div>
+              <div style={{ fontSize:22, fontWeight:900, color:"#1E2240", fontFamily:"'Nunito', sans-serif" }}>{totalScore}</div>
+              <div style={{ fontSize:10, fontWeight:800, color:"#9CA3AF", textTransform:"uppercase", letterSpacing:"0.08em", fontFamily:"'Nunito', sans-serif" }}>Total Poin</div>
             </div>
             <div style={{ width:2, background:"#F0F4FF" }}/>
             <div style={{ padding:"14px 28px", textAlign:"center" }}>
-              <div style={{ fontSize:22, fontWeight:900, color:"#1E2240" }}>{doneCount}/{GAME_IDS.length}</div>
-              <div style={{ fontSize:10, fontWeight:800, color:"#9CA3AF", textTransform:"uppercase", letterSpacing:"0.08em" }}>Selesai</div>
+              <div style={{ fontSize:22, fontWeight:900, color:"#1E2240", fontFamily:"'Nunito', sans-serif" }}>{doneCount}/{GAME_IDS.length}</div>
+              <div style={{ fontSize:10, fontWeight:800, color:"#9CA3AF", textTransform:"uppercase", letterSpacing:"0.08em", fontFamily:"'Nunito', sans-serif" }}>Selesai</div>
             </div>
           </div>
 
@@ -183,7 +186,8 @@ export default function HomeScreen({ avatar, username, user, scores, completed, 
               border:"2px solid #FCD34D", borderRadius:12,
               padding:"10px 20px", fontSize:14, fontWeight:900, color:"#92400E",
               maxWidth:320, margin:"8px auto 0",
-            }}>🌟 Kamu sudah selesaikan semua game!</div>
+              fontFamily:"'Nunito', sans-serif",
+            }}> Kamu sudah selesaikan semua game!</div>
           )}
         </div>
 
@@ -206,16 +210,17 @@ export default function HomeScreen({ avatar, username, user, scores, completed, 
               onMouseLeave={e=>e.currentTarget.style.transform=""}
               >
                 <div style={{ position:"absolute", left:0, top:0, bottom:0, width:5, background:c.accent, borderRadius:"16px 0 0 16px" }}/>
-                <div style={{ marginLeft:8, fontSize:11, fontWeight:900, color:c.accent, minWidth:26, opacity:0.7, fontFamily:"'JetBrains Mono',monospace" }}>
+                <div style={{ marginLeft:8, fontSize:11, fontWeight:900, color:c.accent, minWidth:26, opacity:0.7, fontFamily:"'JetBrains Mono', monospace" }}>
                   {String(GAME_IDS.indexOf(id)+1).padStart(2,"0")}
                 </div>
                 <div style={{ fontSize:28, lineHeight:1 }}>{m.icon}</div>
                 <div style={{ flex:1 }}>
-                  <div style={{ fontSize:15, fontWeight:900, color:"#1E2240", marginBottom:2, fontFamily:"'Grow Year', cursive" }}>{m.title}</div>
-                  <div style={{ fontSize:12, fontWeight:700, color:"#9CA3AF" }}>{DESCS[id]}</div>
+    
+                  <div style={{ fontSize:15, fontWeight:900, color:"#1E2240", marginBottom:2, fontFamily:"'Grow Year', sans-serif" }}>{m.title}</div>
+                  <div style={{ fontSize:12, fontWeight:700, color:"#9CA3AF", fontFamily:"'Nunito', sans-serif" }}>{DESCS[id]}</div>
                   {done
-                    ? <div style={{ fontSize:11, fontWeight:800, color:c.accent, marginTop:3 }}>✓ Selesai · {scores[id]} poin</div>
-                    : <div style={{ fontSize:11, fontWeight:700, color:"#C4C9D8", marginTop:3 }}>{TOTALS[id]} soal</div>
+                    ? <div style={{ fontSize:11, fontWeight:800, color:c.accent, marginTop:3, fontFamily:"'Nunito', sans-serif" }}>✓ Selesai · {scores[id]} poin</div>
+                    : <div style={{ fontSize:11, fontWeight:700, color:"#C4C9D8", marginTop:3, fontFamily:"'Nunito', sans-serif" }}>{TOTALS[id]} soal</div>
                   }
                 </div>
                 <button style={{
@@ -223,7 +228,7 @@ export default function HomeScreen({ avatar, username, user, scores, completed, 
                   color: done ? c.accent : "white",
                   border: done ? `2px solid ${c.accent}` : "none",
                   borderRadius:10, padding:"9px 18px",
-                  fontFamily:"'Nunito',sans-serif", fontSize:13, fontWeight:900,
+                  fontFamily:"'Nunito', sans-serif", fontSize:13, fontWeight:900,
                   cursor:"pointer", flexShrink:0,
                   boxShadow: done ? "none" : `0 3px 0 ${c.shadow}`,
                 }}>
