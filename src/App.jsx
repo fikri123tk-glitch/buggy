@@ -80,8 +80,7 @@ export default function App() {
     const initialCompleted = { sequence:false, robot:false, pattern:false, typing:false, challenge:false };
     setScores(initialScores);
     setCompleted(initialCompleted);
-    localStorage.setItem("logify_scores", JSON.stringify(initialScores));
-    localStorage.setItem("logify_completed", JSON.stringify(initialCompleted));
+    // 🔹 PENTING: Jangan hapus localStorage di sini!
   }
 
   // ── Login handler ─────────────────────────────────────
@@ -117,8 +116,10 @@ export default function App() {
     
     if (savedScores && savedCompleted && finalUser.total_score > 0) {
       try {
-        setScores(JSON.parse(savedScores));
-        setCompleted(JSON.parse(savedCompleted));
+        const parsedScores = JSON.parse(savedScores);
+        const parsedCompleted = JSON.parse(savedCompleted);
+        setScores(parsedScores);
+        setCompleted(parsedCompleted);
         console.log("✅ Scores loaded from localStorage");
       } catch (err) {
         console.warn("Failed to parse saved scores:", err);
@@ -165,14 +166,20 @@ export default function App() {
       }
     }
     
-    // Hapus localStorage & reset state
+    // 🔹 HANYA hapus user & token, JANGAN hapus scores & completed!
     localStorage.removeItem("logify_user");
     localStorage.removeItem("logify_token");
-    localStorage.removeItem("logify_scores");
-    localStorage.removeItem("logify_completed");
+    // ❌ JANGAN hapus ini:
+    // localStorage.removeItem("logify_scores");
+    // localStorage.removeItem("logify_completed");
     
+    // Reset state React saja
     setUser(null);
-    resetScores();
+    const initialScores = { sequence:0, robot:0, pattern:0, typing:0, challenge:0 };
+    const initialCompleted = { sequence:false, robot:false, pattern:false, typing:false, challenge:false };
+    setScores(initialScores);
+    setCompleted(initialCompleted);
+    
     setScreen("home");
   }
  
