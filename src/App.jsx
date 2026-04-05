@@ -11,48 +11,27 @@ import "./App.css";
 const API = "http://localhost:3001";
  
 export default function App() {
-  // ── User / auth ──────────────────────────────────────
-  const [user, setUser] = useState(() => {
-    const saved = localStorage.getItem("logify_user");
-    return saved ? JSON.parse(saved) : null;
-  });
- 
-  // ── Screen ────────────────────────────────────────────
+  const [user, setUser] = useState(null);
   const [screen, setScreen] = useState("home");
- 
-  // ── Active game ───────────────────────────────────────
   const [activeGame, setActiveGame] = useState(null);
- 
-  // ── Game state ────────────────────────────────────────
-  const [scores, setScores] = useState(() => {
-    const saved = localStorage.getItem("logify_scores");
-    return saved ? JSON.parse(saved) : { sequence:0, robot:0, pattern:0, typing:0, challenge:0 };
-  });
   
-  const [completed, setCompleted] = useState(() => {
-    const saved = localStorage.getItem("logify_completed");
-    return saved ? JSON.parse(saved) : { sequence:false, robot:false, pattern:false, typing:false, challenge:false };
+  // Scores & completed from database
+  const [scores, setScores] = useState({ 
+    sequence:0, robot:0, pattern:0, typing:0, challenge:0 
+  });
+  const [completed, setCompleted] = useState({ 
+    sequence:false, robot:false, pattern:false, typing:false, challenge:false 
   });
   
   const [lastResult, setLastResult] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // ── Persist scores & completed ke localStorage ────────
-  useEffect(() => {
-    localStorage.setItem("logify_scores", JSON.stringify(scores));
-  }, [scores]);
-
-  useEffect(() => {
-    localStorage.setItem("logify_completed", JSON.stringify(completed));
-  }, [completed]);
-
-  // ── Load user data dari backend saat app mount ────────
+  // ── Load user data saat app mount ──────────────────────
   useEffect(() => {
     const loadData = async () => {
       const token = localStorage.getItem("logify_token");
-      const storedUser = localStorage.getItem("logify_user");
 
-      if (token && storedUser) {
+      if (token) {
         try {
           const response = await fetch(`${API}/api/user`, {
             headers: { "Authorization": `Bearer ${token}` }
@@ -62,10 +41,13 @@ export default function App() {
           
           if (data.success && data.user) {
             setUser(data.user);
-            localStorage.setItem("logify_user", JSON.stringify(data.user));
+            setScores(data.user.scores || { sequence:0, robot:0, pattern:0, typing:0, challenge:0 });
+            setCompleted(data.user.completed || { sequence:false, robot:false, pattern:false, typing:false, challenge:false });
           }
         } catch (err) {
-          console.warn("Failed to fetch from backend, using localStorage:", err);
+          console.warn("Failed to fetch user data:", err);
+          localStorage.removeItem("logify_token");
+          localStorage.removeItem("logify_user");
         }
       }
       setLoading(false);
@@ -74,116 +56,25 @@ export default function App() {
     loadData();
   }, []);
 
-  // ── Helper: Reset scores ke initial ───────────────────
-  function resetScores() {
-    const initialScores = { sequence:0, robot:0, pattern:0, typing:0, challenge:0 };
-    const initialCompleted = { sequence:false, robot:false, pattern:false, typing:false, challenge:false };
-    setScores(initialScores);
-    setCompleted(initialCompleted);
-    // 🔹 PENTING: Jangan hapus localStorage di sini!
-  }
-
-  // ── Login handler ─────────────────────────────────────
+  // ── Login handler ──────────────────────────────────────
   async function handleLogin(userData) {
-    const token = localStorage.getItem("logify_token");
-    
-    // 1. Fetch data user terbaru dari backend
-    let finalUser = userData;
-    
-    if (token) {
-      try {
-        const response = await fetch(`${API}/api/user`, {
-          headers: { "Authorization": `Bearer ${token}` }
-        });
-        const data = await response.json();
-        
-        if (data.success && data.user) {
-          finalUser = data.user;
-          console.log("✅ User data loaded from database:", data.user);
-        }
-      } catch (err) {
-        console.warn("Failed to fetch user data, using login response:", err);
-      }
-    }
-    
-    // 2. Update user state
-    setUser(finalUser);
-    localStorage.setItem("logify_user", JSON.stringify(finalUser));
-    
-    // 3. Load scores dari localStorage jika user sudah punya progress
-    const savedScores = localStorage.getItem("logify_scores");
-    const savedCompleted = localStorage.getItem("logify_completed");
-    
-    if (savedScores && savedCompleted && finalUser.total_score > 0) {
-      try {
-        const parsedScores = JSON.parse(savedScores);
-        const parsedCompleted = JSON.parse(savedCompleted);
-        setScores(parsedScores);
-        setCompleted(parsedCompleted);
-        console.log("✅ Scores loaded from localStorage");
-      } catch (err) {
-        console.warn("Failed to parse saved scores:", err);
-        resetScores();
-      }
-    } else {
-      resetScores();
-    }
-    
+    setUser(userData);
+    setScores(userData.scores || { sequence:0, robot:0, pattern:0, typing:0, challenge:0 });
+    setCompleted(userData.completed || { sequence:false, robot:false, pattern:false, typing:false, challenge:false });
     setScreen("home");
   }
  
-  // ── Logout handler ────────────────────────────────────
-  async function handleLogout() {
-    const token = localStorage.getItem("logify_token");
-    
-    // Submit progress terakhir ke backend SEBELUM logout
-    if (token && user) {
-      const doneCount = Object.values(completed).filter(Boolean).length;
-      const totalScore = Object.values(scores).reduce((a, b) => a + b, 0);
-      const progressPercent = Math.round((doneCount / 5) * 100);
-      
-      try {
-        const response = await fetch(`${API}/api/progress`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            token,
-            total_score: totalScore,
-            games_completed: doneCount,
-            progress_percent: progressPercent,
-          }),
-        });
-        
-        const result = await response.json();
-        
-        if (result.success) {
-          console.log("✅ Progress saved to database before logout");
-        } else {
-          console.error("❌ Failed to save progress:", result.error);
-        }
-      } catch (err) {
-        console.error("❌ Network error:", err);
-      }
-    }
-    
-    // 🔹 HANYA hapus user & token, JANGAN hapus scores & completed!
+  // ── Logout handler ─────────────────────────────────────
+  function handleLogout() {
     localStorage.removeItem("logify_user");
     localStorage.removeItem("logify_token");
-    // ❌ JANGAN hapus ini:
-    // localStorage.removeItem("logify_scores");
-    // localStorage.removeItem("logify_completed");
-    
-    // Reset state React saja
     setUser(null);
-    const initialScores = { sequence:0, robot:0, pattern:0, typing:0, challenge:0 };
-    const initialCompleted = { sequence:false, robot:false, pattern:false, typing:false, challenge:false };
-    setScores(initialScores);
-    setCompleted(initialCompleted);
-    
+    setScores({ sequence:0, robot:0, pattern:0, typing:0, challenge:0 });
+    setCompleted({ sequence:false, robot:false, pattern:false, typing:false, challenge:false });
     setScreen("home");
   }
  
-  // ── Game handlers ─────────────────────────────────────
+  // ── Game handlers ──────────────────────────────────────
   function startGame(id) {
     setActiveGame(id);
     setScreen("game");
@@ -198,40 +89,37 @@ export default function App() {
     setLastResult({ id, score });
     setScreen("result");
 
-    // Update progress ke backend
-    const doneCount = Object.values(newCompleted).filter(Boolean).length;
-    const totalScore = Object.values(newScores).reduce((a, b) => a + b, 0);
-    const progressPercent = Math.round((doneCount / 5) * 100);
-
+    // Submit ke backend
     const token = localStorage.getItem("logify_token");
     if (token && user) {
       try {
-        const response = await fetch(`${API}/api/progress`, {
+        const response = await fetch(`${API}/api/scores`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             token,
-            total_score: totalScore,
-            games_completed: doneCount,
-            progress_percent: progressPercent,
+            game_id: id,
+            score,
+            completed: true,
           }),
         });
         
         const result = await response.json();
         
         if (result.success) {
+          // Update user state dengan data terbaru
           const updatedUser = {
             ...user,
-            total_score: totalScore,
-            games_completed: doneCount,
-            progress_percent: progressPercent,
+            total_score: result.new_total_score,
+            games_completed: result.new_games_completed,
+            progress_percent: result.new_progress_percent,
           };
           setUser(updatedUser);
           localStorage.setItem("logify_user", JSON.stringify(updatedUser));
-          console.log("✅ Progress updated after game");
+          console.log("✅ Score submitted to database");
         }
       } catch (err) {
-        console.error("❌ Failed to update progress:", err);
+        console.error("❌ Failed to submit score:", err);
       }
     }
   }
@@ -242,7 +130,7 @@ export default function App() {
   const totalScore = Object.values(scores).reduce((a, b) => a + b, 0);
   const doneCount = Object.values(completed).filter(Boolean).length;
 
-  // ── Loading screen ────────────────────────────────────
+  // ── Loading screen ─────────────────────────────────────
   if (loading) {
     return (
       <div className="app" style={{
@@ -264,12 +152,11 @@ export default function App() {
     );
   }
  
-  // ── Belum login → tampilkan LoginScreen ───────────────
+  // ── Render ─────────────────────────────────────────────
   if (!user) {
     return <LoginScreen onLogin={handleLogin} />;
   }
  
-  // ── Sudah login → tampilkan app ───────────────────────
   return (
     <div className="app">
       <BgCanvas avatar={user.avatar} />
