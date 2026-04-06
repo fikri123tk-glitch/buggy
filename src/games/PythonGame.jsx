@@ -49,6 +49,57 @@ const CHAPTERS = [
       { id: 5, title: "Tantangan!",    type: "write" },
     ],
   },
+  
+  // ── NEW CHAPTERS ──────────────────────────────────────
+  {
+    id: "loops",
+    title: "Perulangan",
+    subtitle: "Ulangi kode dengan mudah!",
+    color: "#10B981",
+    shadow: "#047857",
+    bg: "#ECFDF5",
+    icon: "🔄",
+    levels: [
+      { id: 1, title: "For Loop Dasar",    type: "run"   },
+      { id: 2, title: "Range Start & End", type: "fill"  },
+      { id: 3, title: "Print Pola",        type: "write" },
+      { id: 4, title: "Indentasi di Loop", type: "mcq"   },
+      { id: 5, title: "Perbaiki Indentasi",type: "fix"   },
+    ],
+  },
+  {
+    id: "lists",
+    title: "List",
+    subtitle: "Kumpulan data dalam satu variabel!",
+    color: "#EF4444",
+    shadow: "#B91C1C",
+    bg: "#FEF2F2",
+    icon: "📋",
+    levels: [
+      { id: 1, title: "Membuat List",      type: "run"   },
+      { id: 2, title: "Akses Elemen List", type: "fill"  },
+      { id: 3, title: "Len & List",        type: "write" },
+      { id: 4, title: "Index Negatif",     type: "mcq"   },
+      { id: 5, title: "Append ke List",    type: "fix"   },
+    ],
+  },
+  {
+    id: "functions",
+    title: "Fungsi",
+    subtitle: "Buat kode yang reusable!",
+    color: "#F59E0B",
+    shadow: "#B45309",
+    bg: "#FFFBEA",
+    icon: "⚙️",
+    levels: [
+      { id: 1, title: "Membuat Fungsi",    type: "run"   },
+      { id: 2, title: "Fungsi dengan Parameter", type: "fill"  },
+      { id: 3, title: "Fungsi Return",     type: "write" },
+      { id: 4, title: "Scope Variabel",    type: "mcq"   },
+      { id: 5, title: "Panggil Fungsi",    type: "fix"   },
+    ],
+  },
+  // ──────────────────────────────────────────────────────
 ];
 
 const TYPE_INFO = {
@@ -303,8 +354,9 @@ export default function PythonGame({ onFinish, onHome }) {
           );
         })}
 
+        {/* Footer */}
         <div style={{ textAlign:"center", padding:"8px 0", fontSize:13, fontWeight:800, color:"#C4C9D8" }}>
-          🚀 Materi baru segera hadir!
+           Terus belajar dan berlatih!
         </div>
       </div>
     </div>
