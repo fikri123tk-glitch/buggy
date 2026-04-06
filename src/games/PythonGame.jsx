@@ -9,7 +9,7 @@ const CHAPTERS = [
     color: "#FF9F43",
     shadow: "#E07020",
     bg: "#FFF5EB",
-    icon: "🐍",
+    icon: <img src="/Pythonlogo.png" alt="Python" style={{ width:26, height:26, objectFit:"contain" }} />,
     levels: [
       { id: 1, title: "Hello Python!", type: "run"   },
       { id: 2, title: "Print Teks",   type: "fill"  },
@@ -24,7 +24,7 @@ const CHAPTERS = [
     color: "#3B82F6",
     shadow: "#1D4ED8",
     bg: "#EFF6FF",
-    icon: "📦",
+    icon: <img src="/python-logo.png" alt="Python" style={{ width:26, height:26, objectFit:"contain" }} />,
     levels: [
       { id: 1, title: "Buat Variabel",   type: "write" },
       { id: 2, title: "Tipe Data",       type: "mcq"   },
@@ -40,7 +40,7 @@ const CHAPTERS = [
     color: "#8B5CF6",
     shadow: "#6D28D9",
     bg: "#F5F3FF",
-    icon: "🔀",
+    icon: <img src="/python-logo.png" alt="Python" style={{ width:26, height:26, objectFit:"contain" }} />,
     levels: [
       { id: 1, title: "If Sederhana",  type: "mcq"   },
       { id: 2, title: "If & Else",     type: "fill"  },
@@ -49,8 +49,6 @@ const CHAPTERS = [
       { id: 5, title: "Tantangan!",    type: "write" },
     ],
   },
-  
-  // ── NEW CHAPTERS ──────────────────────────────────────
   {
     id: "loops",
     title: "Perulangan",
@@ -58,7 +56,7 @@ const CHAPTERS = [
     color: "#10B981",
     shadow: "#047857",
     bg: "#ECFDF5",
-    icon: "🔄",
+    icon: <img src="/python-logo.png" alt="Python" style={{ width:26, height:26, objectFit:"contain" }} />,
     levels: [
       { id: 1, title: "For Loop Dasar",    type: "run"   },
       { id: 2, title: "Range Start & End", type: "fill"  },
@@ -74,7 +72,7 @@ const CHAPTERS = [
     color: "#EF4444",
     shadow: "#B91C1C",
     bg: "#FEF2F2",
-    icon: "📋",
+    icon: <img src="/python-logo.png" alt="Python" style={{ width:26, height:26, objectFit:"contain" }} />,
     levels: [
       { id: 1, title: "Membuat List",      type: "run"   },
       { id: 2, title: "Akses Elemen List", type: "fill"  },
@@ -90,16 +88,15 @@ const CHAPTERS = [
     color: "#F59E0B",
     shadow: "#B45309",
     bg: "#FFFBEA",
-    icon: "⚙️",
+    icon: <img src="/python-logo.png" alt="Python" style={{ width:26, height:26, objectFit:"contain" }} />,
     levels: [
-      { id: 1, title: "Membuat Fungsi",    type: "run"   },
-      { id: 2, title: "Fungsi dengan Parameter", type: "fill"  },
-      { id: 3, title: "Fungsi Return",     type: "write" },
-      { id: 4, title: "Scope Variabel",    type: "mcq"   },
-      { id: 5, title: "Panggil Fungsi",    type: "fix"   },
+      { id: 1, title: "Membuat Fungsi",         type: "run"   },
+      { id: 2, title: "Fungsi dengan Parameter",type: "fill"  },
+      { id: 3, title: "Fungsi Return",          type: "write" },
+      { id: 4, title: "Scope Variabel",         type: "mcq"   },
+      { id: 5, title: "Panggil Fungsi",         type: "fix"   },
     ],
   },
-  // ──────────────────────────────────────────────────────
 ];
 
 const TYPE_INFO = {
