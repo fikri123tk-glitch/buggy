@@ -7,7 +7,6 @@ export default function ResultScreen({ result, scores, completed, doneCount, onP
   const m = META[id];
   const allDone = doneCount === GAME_IDS.length; // 🔹 Fix: 4 → 5 games
   const totalScore = Object.values(scores).reduce((a,b)=>a+b, 0);
-
   const msg   = score >= 70 ? "Luar Biasa!" : score >= 40 ? "Bagus!" : "Terus Semangat!";
 
   return (
@@ -20,11 +19,7 @@ export default function ResultScreen({ result, scores, completed, doneCount, onP
         boxShadow:`0 12px 40px ${m.color}25`,
         border:`2.5px solid ${m.color}40`,
       }}>
-        <div style={{ fontSize:60, marginBottom:12 }}>{emoji}</div>
-        <h2 style={{ fontSize:26, fontWeight:900, color:"#1E2240", margin:"0 0 4px" }}>{msg}</h2>
-        <p style={{ fontSize:14, fontWeight:700, color:"#9CA3AF", margin:"0 0 24px" }}>
-          {m.icon} {m.title}
-        </p>
+        
 
         {/* Score */}
         <div style={{
