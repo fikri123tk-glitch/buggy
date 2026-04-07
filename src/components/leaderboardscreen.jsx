@@ -107,7 +107,7 @@ export default function LeaderboardScreen({ user, onBack }) {
 
           {loading && (
             <div style={{ padding:"32px", textAlign:"center", color:"#9CA3AF", fontWeight:800 }}>
-              ⏳ Memuat...
+               Memuat...
             </div>
           )}
 
@@ -119,7 +119,7 @@ export default function LeaderboardScreen({ user, onBack }) {
 
           {!loading && !error && data.length === 0 && (
             <div style={{ padding:"32px", textAlign:"center", color:"#9CA3AF", fontWeight:800 }}>
-              Belum ada pemain. Jadilah yang pertama! 🚀
+              Belum ada pemain. Jadilah yang pertama! 
             </div>
           )}
 

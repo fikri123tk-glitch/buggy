@@ -8,7 +8,6 @@ export default function ResultScreen({ result, scores, completed, doneCount, onP
   const allDone = doneCount === GAME_IDS.length; // 🔹 Fix: 4 → 5 games
   const totalScore = Object.values(scores).reduce((a,b)=>a+b, 0);
 
-  const emoji = score >= 70 ? "🌟" : score >= 40 ? "😊" : "💪";
   const msg   = score >= 70 ? "Luar Biasa!" : score >= 40 ? "Bagus!" : "Terus Semangat!";
 
   return (

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "../App.css";
 
-const AVATARS = ["🐱","🪲","🐸","🦊","🐼","🐨","🦁","🐯"];
+const AVATARS = ["🐱",,"🐸","🦊","🐼","🐨","🦁","🐯"];
 const API = "http://localhost:3001";
 const LOGO_URL = "/logo.png";
 
@@ -196,7 +196,7 @@ export default function LoginScreen({ onLogin }) {
         </div>
 
         <div style={{ textAlign:"center", marginTop:16, fontSize:12, fontWeight:700, color:"var(--muted)", fontFamily: "var(--f)" }}>
-          Logify · Belajar coding dengan seru! 🪲
+          Logify · Belajar coding dengan seru! 
         </div>
       </div>
     </div>

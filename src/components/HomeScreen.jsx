@@ -186,7 +186,7 @@ export default function HomeScreen({ avatar, username, user, scores, completed, 
                 onMouseEnter={e=>e.currentTarget.style.background="#FEF2F2"}
                 onMouseLeave={e=>e.currentTarget.style.background="white"}
               >
-                🚪 Keluar
+                 Keluar
               </button>
             </div>
           </>
@@ -228,7 +228,7 @@ export default function HomeScreen({ avatar, username, user, scores, completed, 
               animation:"float 3s ease-in-out infinite",
             }}
           >
-            🪲
+            
           </div>
 
           {/* Tagline */}
@@ -278,7 +278,7 @@ export default function HomeScreen({ avatar, username, user, scores, completed, 
               margin:"8px auto 0",
               fontFamily:"'Nunito', sans-serif",
             }}>
-              🌟 Kamu sudah selesaikan semua game!
+              Kamu sudah selesaikan semua game!
             </div>
           )}
         </div>
