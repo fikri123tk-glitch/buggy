@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"; // 🔹 Tambah useEffect
+import { useState, useEffect } from "react";
 import { META } from "../constants";
 
 const GAME_IDS = ["sequence","robot","pattern","typing","challenge"];
@@ -21,11 +21,11 @@ const TOTALS = { sequence:10, robot:16, pattern:10, typing:8, challenge:12 };
 export default function HomeScreen({ avatar, username, user, scores, completed, totalScore, doneCount, onStart, onLogout, onLeaderboard }) {
   const [showProfile, setShowProfile] = useState(false);
   
-  // 🔹 State untuk scroll hide/show tabs
+  // State untuk scroll hide/show tabs
   const [showTabs, setShowTabs] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
 
-  // 🔹 Detect scroll direction
+  // Detect scroll direction
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
@@ -56,7 +56,7 @@ export default function HomeScreen({ avatar, username, user, scores, completed, 
         onClick={onLeaderboard} 
         style={{
           position:"fixed", 
-          top: showTabs ? 20 : -100,  // 🔹 Hide saat scroll ke bawah
+          top: showTabs ? 20 : -100,
           left:24, 
           zIndex:50,
           background:"white", 
@@ -72,7 +72,7 @@ export default function HomeScreen({ avatar, username, user, scores, completed, 
           alignItems:"center", 
           gap:6,
           boxShadow:"0 4px 16px rgba(0,0,0,0.08)", 
-          transition:"top 0.3s ease",  // 🔹 Animasi smooth
+          transition:"top 0.3s ease",
         }}
         onMouseEnter={e=>{e.currentTarget.style.borderColor="#FF9F43"; e.currentTarget.style.boxShadow="0 4px 20px rgba(255,159,67,0.25)";}}
         onMouseLeave={e=>{e.currentTarget.style.borderColor="#E2E8F0"; e.currentTarget.style.boxShadow="0 4px 16px rgba(0,0,0,0.08)";}}
@@ -84,10 +84,10 @@ export default function HomeScreen({ avatar, username, user, scores, completed, 
       <div 
         style={{ 
           position:"fixed", 
-          top: showTabs ? 20 : -100,  // 🔹 Hide saat scroll ke bawah
+          top: showTabs ? 20 : -100,
           right:24, 
           zIndex:50,
-          transition:"top 0.3s ease",  // 🔹 Animasi smooth
+          transition:"top 0.3s ease",
         }}
       >
         <button onClick={() => setShowProfile(v => !v)} style={{
@@ -103,7 +103,6 @@ export default function HomeScreen({ avatar, username, user, scores, completed, 
           transition:"all 0.15s", 
           fontFamily:"'Nunito', sans-serif",
         }}>
-          {/* 🔹 Avatar user (emoji) - ini avatar user, bukan logo app */}
           <div style={{ fontSize:26, lineHeight:1 }}>{avatar}</div>
           <div style={{ textAlign:"left" }}>
             <div style={{ fontSize:14, fontWeight:900, color:"#1E2240", fontFamily:"'Nunito', sans-serif" }}>{username}</div>
@@ -131,7 +130,6 @@ export default function HomeScreen({ avatar, username, user, scores, completed, 
               animation:"popIn 0.2s ease",
             }}>
               <div style={{ textAlign:"center", marginBottom:16 }}>
-                {/* 🔹 Avatar user di popup (emoji) */}
                 <div style={{ fontSize:48, marginBottom:6 }}>{avatar}</div>
                 <div style={{ fontSize:18, fontWeight:900, color:"#1E2240", fontFamily:"'Nunito', sans-serif" }}>{username}</div>
                 <div style={{ fontSize:12, fontWeight:700, color:"#9CA3AF", fontFamily:"'Nunito', sans-serif" }}>Pemain Logify</div>
@@ -285,7 +283,7 @@ export default function HomeScreen({ avatar, username, user, scores, completed, 
           )}
         </div>
 
-        {/* Game cards */}
+        {/* Game cards - 🔹 FIX: Hanya tombol yang bisa klik */}
         <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
           {GAME_IDS.map(id => {
             const c = COLORS[id];
@@ -294,22 +292,22 @@ export default function HomeScreen({ avatar, username, user, scores, completed, 
             return (
               <div 
                 key={id} 
-                onClick={() => onStart(id)} 
+                // ❌ HAPUS onClick dari sini!
                 style={{
                   background:"white", 
                   borderRadius:16, 
-                  padding:"16px 18px",
+                  padding:"24px 28px",
                   border:`2.5px solid ${done ? c.accent+"60" : "#E2E8F0"}`,
                   display:"flex", 
                   alignItems:"center", 
-                  gap:14,
-                  cursor:"pointer", 
+                  gap:20,
+                  // ❌ HAPUS cursor:pointer dari card (biar jelas hanya button yang clickable)
                   position:"relative", 
                   overflow:"hidden",
                   transition:"all 0.2s",
                   boxShadow: done ? `0 4px 20px ${c.accent}25` : "0 2px 8px rgba(0,0,0,0.04)",
                 }}
-                onMouseEnter={e=>e.currentTarget.style.transform="translateY(-2px)"}
+                onMouseEnter={e=>e.currentTarget.style.transform="translateY(-3px)"}
                 onMouseLeave={e=>e.currentTarget.style.transform=""}
               >
                 <div 
@@ -325,11 +323,11 @@ export default function HomeScreen({ avatar, username, user, scores, completed, 
                 />
                 <div 
                   style={{ 
-                    marginLeft:8, 
-                    fontSize:11, 
+                    marginLeft:12, 
+                    fontSize:13, 
                     fontWeight:900, 
                     color:c.accent, 
-                    minWidth:26, 
+                    minWidth:32, 
                     opacity:0.7, 
                     fontFamily:"'JetBrains Mono', monospace" 
                   }}
@@ -384,7 +382,10 @@ export default function HomeScreen({ avatar, username, user, scores, completed, 
                       </div>
                   }
                 </div>
+                
+                {/* ✅ Tombol dengan onClick */}
                 <button 
+                  onClick={() => onStart(id)}  // 🔹 onClick ada di BUTTON
                   style={{
                     background: done ? "white" : c.accent,
                     color: done ? c.accent : "white",
@@ -397,6 +398,19 @@ export default function HomeScreen({ avatar, username, user, scores, completed, 
                     cursor:"pointer", 
                     flexShrink:0,
                     boxShadow: done ? "none" : `0 3px 0 ${c.shadow}`,
+                    transition:"all 0.15s",
+                  }}
+                  onMouseEnter={e=>{
+                    if (!done) {
+                      e.currentTarget.style.transform="translate(-2px, -2px)";
+                      e.currentTarget.style.boxShadow=`0 5px 0 ${c.shadow}`;
+                    }
+                  }}
+                  onMouseLeave={e=>{
+                    if (!done) {
+                      e.currentTarget.style.transform="translate(0, 0)";
+                      e.currentTarget.style.boxShadow=`0 3px 0 ${c.shadow}`;
+                    }
                   }}
                 >
                   {done ? "Ulangi" : "Mulai"}
